@@ -16,7 +16,7 @@ on:
 jobs:
   build-push-ecr-develop:
     name: sre-core-banking-templates build and push in ECR
-    runs-on: dev
+    runs-on: poc-runner
     # env:
     #   TAG_IMAGE: $(echo $GITHUB_SHA | head -c 7)
     #   ECR_REGISTRY: 160927522959.dkr.ecr.us-east-2.amazonaws.com
