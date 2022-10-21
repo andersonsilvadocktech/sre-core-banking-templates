@@ -1,0 +1,39 @@
+name: 'Pipeline build and push in ECR'
+
+on:
+  workflow_call:
+    inputs:
+      TAG_IMAGE:
+        required: true
+        type: string
+      ECR_REGISTRY:
+        required: true
+        type: string
+      ECR_REPOSITORY:
+        required: true
+        type: string
+
+jobs:
+  build-push-ecr-develop:
+    name: sre-core-banking-templates build and push in ECR
+    runs-on: dev
+    # env:
+    #   TAG_IMAGE: $(echo $GITHUB_SHA | head -c 7)
+    #   ECR_REGISTRY: <AccountID>.dkr.ecr.<region>.amazonaws.com
+    #   ECR_REPOSITORY: <org-github>/<repository-name>
+    steps:
+    - name: check out code
+      uses: actions/checkout@v2
+
+    - name: aws login ecr 
+      run: |
+        aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin ${{inputs.ECR_REGISTRY}}
+
+    - name: Build container image
+      run: |
+        docker build -t ${{inputs.ECR_REPOSITORY}} .
+        docker tag ${{inputs.ECR_REPOSITORY}}:latest ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPOSITORY}}:${{inputs.TAG_IMAGE}}
+
+    - name: Push image to ECR
+      run: | 
+        docker push ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPOSITORY}}:${{inputs.TAG_IMAGE}}
