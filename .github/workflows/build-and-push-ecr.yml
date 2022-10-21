@@ -19,15 +19,15 @@ jobs:
     runs-on: dev
     # env:
     #   TAG_IMAGE: $(echo $GITHUB_SHA | head -c 7)
-    #   ECR_REGISTRY: <AccountID>.dkr.ecr.<region>.amazonaws.com
-    #   ECR_REPOSITORY: <org-github>/<repository-name>
+    #   ECR_REGISTRY: 160927522959.dkr.ecr.us-east-2.amazonaws.com
+    #   ECR_REPOSITORY: poc/andersonsilvadocktech
     steps:
     - name: check out code
       uses: actions/checkout@v2
 
     - name: aws login ecr 
       run: |
-        aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin ${{inputs.ECR_REGISTRY}}
+        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${{inputs.ECR_REGISTRY}}
 
     - name: Build container image
       run: |
