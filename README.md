@@ -1,0 +1,1 @@
+# sre-core-banking-templates
